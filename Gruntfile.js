@@ -1,39 +1,35 @@
-/*global module:false*/
 module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
     // Task configuration.
-    latex: {
+    shell: {
         resume: {
           options: {
-            outputDirectory: 'build/'
           },
-          src: ['document.tex']
+          command: "pdflatex -interaction=nonstopmode -output-directory=build *.tex"
         },
     },
 
     watch: {
       texFiles: {
-        files: 'document.tex',
+        files: ['*.tex', '*.cls'],
         tasks: ['default']
       },
     },
-    
-    open: {
-        file: {
-            path: "build/document.pdf"
-        }
+
+    clean: {
+        files: ["build/**/*"]
     }
   });
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-latex');
-  grunt.loadNpmTasks('grunt-open');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-shell');
 
   // Default task.
-  grunt.registerTask('default', ['latex']);
-  grunt.registerTask('debug', ['latex', 'open',  'watch']);
+  grunt.registerTask('default', ['clean', 'shell']);
+  grunt.registerTask('debug', ['shell', 'watch']);
 
 };
